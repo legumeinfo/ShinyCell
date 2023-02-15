@@ -1,3 +1,7 @@
+# &#127793; ShinyCell (LIS version)
+
+Welcome to the [Legume Information System](https://www.legumeinfo.org) fork of `ShinyCell`. The legume seedling icon &#127793; indicates details specific to this version.
+
 # ShinyCell package
 `ShinyCell` is a R package that allows users to create interactive Shiny-based 
 web applications to visualise single-cell data via (i) visualising cell 
@@ -111,6 +115,12 @@ if(length(newPkg)){install.packages(newPkg)}
 devtools::install_github("SGDDNB/ShinyCell")
 ```
 
+&#127793; To install this LIS version instead, use
+``` r
+remove.packages("ShinyCell") # if necessary
+devtools::install_github("legumeinfo/ShinyCell")
+```
+
 
 
 # Quick Start Guide
@@ -147,6 +157,17 @@ e.g. [shinyapps.io](https://www.shinyapps.io/) and Amazon Web Services (AWS)
 or be hosted via Shiny Server. For further details, refer to 
 [Instructions on how to deploy ShinyCell apps online](
 https://htmlpreview.github.io/?https://github.com/SGDDNB/ShinyCell/blob/master/docs/4cloud.html).
+
+&#127793; To generate our application [_Medicago truncatula_ Meliloti vs. Mock Inoculated Root](https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/), we use
+``` r
+seurat_medtr <- readRDS("shinycell.rds")
+scConf_medtr <- createConfig(seurat_medtr)
+title_medtr <- "Medicago truncatula Meliloti vs. Mock Inoculated Root"
+dir_medtr <- "medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/"
+makeShinyApp(seurat_medtr, scConf_medtr, gene.mapping = TRUE,
+  shiny.title = title_medtr, shiny.dir = dir_medtr)
+```
+which puts the application files in `medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/` instead of the default `shinyApp/`.
 
 The shiny app contains seven tabs (highlighted in blue box), with the opening 
 page showing the first tab "CellInfo vs GeneExpr" (see below), plotting both 
