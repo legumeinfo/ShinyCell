@@ -66,7 +66,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     ### Write code for server.R
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
-      c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
+      c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr","ggplot2",
         "ggrepel","hdf5r","ggdendro","gridExtra")), file = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVload(i), append = TRUE, file = fname)
@@ -81,7 +81,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     ### Write code for ui.R
     fname = paste0(shiny.dir, "/ui.R")
     readr::write_file(wrLib(
-      c("shiny","shinyhelper","data.table","Matrix","DT","magrittr")), file = fname)
+      c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr")), file = fname)
     for(i in shiny.prefix){
       readr::write_file(wrUIload(i), append = TRUE, file = fname)
     }
@@ -107,7 +107,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     ### Write code for server.R
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
-      c("shiny","shinyhelper","data.table","Matrix","DT","magrittr","ggplot2",
+      c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr","ggplot2",
         "ggrepel","hdf5r","ggdendro","gridExtra")), path = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVload(i), append = TRUE, path = fname)
@@ -122,7 +122,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     ### Write code for ui.R
     fname = paste0(shiny.dir, "/ui.R")
     readr::write_file(wrLib(
-      c("shiny","shinyhelper","data.table","Matrix","DT","magrittr")), path = fname)
+      c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr")), path = fname)
     for(i in shiny.prefix){
       readr::write_file(wrUIload(i), append = TRUE, path = fname)
     }

@@ -104,7 +104,7 @@ Furthermore, on the system where the Shiny app will be deployed, users can run
 the following code to check if the packages required by the Shiny app exist 
 and install them if required:
 ``` r
-reqPkg = c("shiny", "shinyhelper", "data.table", "Matrix", "DT", "hdf5r", 
+reqPkg = c("shiny", "shinyhelper", "shinyjs", "data.table", "Matrix", "DT", "hdf5r",
            "reticulate", "ggplot2", "gridExtra", "magrittr", "ggdendro")
 newPkg = reqPkg[!(reqPkg %in% installed.packages()[,"Package"])]
 if(length(newPkg)){install.packages(newPkg)}
@@ -205,6 +205,15 @@ using hierarchical clustering.
 
 ![](images/quick-shiny5.png)
 
+### &#127793; Specifying values in the URL
+
+This LIS version allows setting initial values of
+* `gene1`: gene to display in 1st gene expression view
+* `gene2`: gene to display in 2nd gene expression view
+* `tab`: index of selected tab, starting at 1
+
+For example, this URL will launch the application in the **Gene coexpression** tab, with genes MtRPG and MtFE selected.<br>
+https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/?gene1=MtRPG&gene2=MtFE&tab=4
 
 
 # Frequently Asked Questions
