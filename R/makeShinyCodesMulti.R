@@ -67,7 +67,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra")), file = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","RCurl","jsonlite")), file = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVload(i), append = TRUE, file = fname)
     }
@@ -108,7 +108,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
     fname = paste0(shiny.dir, "/server.R")
     readr::write_file(wrLib(
       c("shiny","shinyhelper","shinyjs","data.table","Matrix","DT","magrittr","ggplot2",
-        "ggrepel","hdf5r","ggdendro","gridExtra")), path = fname)
+        "ggrepel","hdf5r","ggdendro","gridExtra","RCurl","jsonlite")), path = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVload(i), append = TRUE, path = fname)
     }
