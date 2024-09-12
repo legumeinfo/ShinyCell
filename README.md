@@ -164,6 +164,8 @@ seurat_medtr <- readRDS("shinycell.rds")
 scConf_medtr <- createConfig(seurat_medtr)
 title_medtr <- "Medicago truncatula Meliloti vs. Mock Inoculated Root"
 dir_medtr <- "medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/"
+gene_prefix <- "medtr.A17.gnm5.ann1_6."
+write(gene_prefix, file = paste0(dir_medtr, "gene_prefix.txt"))
 makeShinyApp(seurat_medtr, scConf_medtr, gene.mapping = TRUE,
   shiny.title = title_medtr, shiny.dir = dir_medtr)
 ```
@@ -214,6 +216,10 @@ This LIS version allows setting initial values of
 
 For example, this URL will launch the application in the **Gene coexpression** tab, with genes MtRPG and MtFE selected.<br>
 https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/?gene1=MtRPG&gene2=MtFE&tab=4
+
+### &#127793; Gene linkouts
+
+The **Gene expression** panels now display a set of linkouts for the selected gene. It obtains these from the LIS `gene_linkouts` microservice, which takes as argument the full-yuck gene name. Since the gene names in `ShinyCell` are generally abbreviated, during your build process you must create a file called `gene_prefix.txt` containing a single line of text, the prefix that restores the gene names to full-yuck. (See the _Medicago_ build example above.)
 
 
 # Frequently Asked Questions
