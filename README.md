@@ -164,8 +164,11 @@ seurat_medtr <- readRDS("shinycell.rds")
 scConf_medtr <- createConfig(seurat_medtr)
 title_medtr <- "Medicago truncatula Meliloti vs. Mock Inoculated Root"
 dir_medtr <- "medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/"
-gene_prefix <- "medtr.A17.gnm5.ann1_6."
-write(gene_prefix, file = paste0(dir_medtr, "gene_prefix.txt"))
+props_medtr <- list(
+  gene_prefix = "medtr.A17.gnm5.ann1_6.",
+  gene_lookup_filename = "medicago_gene_id_lookup.txt"
+)
+saveRDS(props_medtr, paste0(dir_medtr, "properties.rds"))
 makeShinyApp(seurat_medtr, scConf_medtr, gene.mapping = TRUE,
   shiny.title = title_medtr, shiny.dir = dir_medtr)
 ```
@@ -219,7 +222,13 @@ https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thib
 
 ### &#127793; Gene linkouts
 
-The **Gene expression** panels now display a set of linkouts for the selected gene. It obtains these from the LIS `gene_linkouts` microservice, which takes as argument the full-yuck gene name. Since the gene names in `ShinyCell` are generally abbreviated, during your build process you must create a file called `gene_prefix.txt` containing a single line of text, the prefix that restores the gene names to full-yuck. (See the _Medicago_ build example above.)
+The **Gene expression** panels now display a set of linkouts for the selected gene. We obtain these from the LIS `gene_linkouts` microservice, which takes as argument the full-yuck gene name. Since the gene names in your Seurat object are generally short forms or represented by another symbol, you must tell `ShinyCell` how to convert them to full-yuck. As part of your build process, create an R data file called `properties.rds`, containing a list with the following (optional) fields:
+
+`gene_lookup_filename`: Name of a text file containing a lookup table of gene symbol to gene name. This file must contain two tab-separated columns; column 1 is the gene name and column 2 is the gene symbol(s). If multiple symbols point to the same gene, you may list them on the same row in column 2, separated by commas. If missing, `ShinyCell` will assume that all of your gene names really are names and not symbols, and skip the lookup.
+
+`gene_prefix`: Prefix that restores the gene names to full-yuck. If missing, `ShinyCell` will assume that the gene names are already full-yuck, and skip the prefixing step.
+
+For an example, see the **_Medicago truncatula_ Meliloti vs. Mock Inoculated Root** generation process above.
 
 
 # Frequently Asked Questions
