@@ -708,6 +708,54 @@ wrSVfix <- function() {
              ' \n')
 }
 
+#' Write code for parsing URL fields
+#'
+#' @param num_datasets number of files (datasets)
+#' TODO: automatically determine num_tabs (now hard-coded to 7)
+#'
+#' @rdname wrSVurl
+#' @export wrSVurl
+#'
+wrSVurl <- function(num_datasets = 1) {
+  glue::glue(' \n',
+             '  # Extract requested dataset and tab from URL \n',
+             '  url_fields <- isolate(parseQueryString(session$clientData$url_search)) \n',
+             '  if (is.null(url_fields$dataset)) {{ \n',
+             '    i_dataset <- 1 \n',
+             '  }} else {{ \n',
+             '    i_dataset <- as.integer(url_fields$dataset) \n',
+             '    if (is.na(i_dataset)) i_dataset <- -1 \n',
+             '  }} \n',
+             '  if (is.null(url_fields$tab)) {{ \n',
+             '    i_tab <- 1 \n',
+             '  }} else {{ \n',
+             '    i_tab <- as.integer(url_fields$tab) \n',
+             '    if (is.na(i_tab)) i_tab <- -1 \n',
+             '  }} \n',
+             '  num_tabs <- 7 \n',
+             '  good_request <- (i_dataset >= 1 && i_dataset <= {num_datasets} && i_tab >= 1 && i_tab <= num_tabs) \n',
+             '  if (good_request) {{ \n',
+             '    # The tabs we are interested in have href in the form \'#tab-nnnn-t\', \n',
+             '    # where nnnn is each dataset\'s unique 4-digit tabset id, and t is the tab id (i_tab), \n',
+             '    runjs(paste( \n',
+             '      "const navbar = document.getElementById(\'navbar\');", \n',
+             '      "const tabAnchors = Array.from(navbar.getElementsByTagName(\'a\'));", \n',
+             '      "const namedTabs = tabAnchors.filter((a) => a.hasAttribute(\'href\') && a.hasAttribute(\'data-value\'));", \n',
+             '      "const tabIds = namedTabs.map((tab) => tab.getAttribute(\'href\'));", \n',
+             '      "const rgx = /\\\\d{{4}}/;", \n',
+             '      "const tabsetIds = tabIds.filter((tab) => rgx.test(tab)).map((tab) => rgx.exec(tab)).flat();", \n',
+             '      "const uniqueTabsetIds = Array.from(new Set(tabsetIds));", \n',
+             '      paste0("const tabId = \'#tab-\' + uniqueTabsetIds[", (i_dataset - 1), "] + \'-", i_tab, "\';"), \n',
+             '      "document.querySelector(\'a[href=\\"\' + tabId + \'\\"]\').click();" \n',
+             '    )) \n',
+             '  }} else {{ \n',
+             '    alert("Invalid dataset or tab index in URL"); \n',
+             '    updateQueryString("/") \n',
+             '  }} \n',
+             ' \n',
+             .trim = FALSE)
+}
+
 #' Write code for main block of server.R
 #'
 #' @param prefix file prefix 
@@ -717,7 +765,6 @@ wrSVfix <- function() {
 #'
 wrSVmain <- function(prefix, subst = "") {
   glue::glue('optCrt="{{ option_create: function(data,escape) {{return(\'<div class=\\"create\\"><strong>\' + \'</strong></div>\');}} }}" \n', 
-             '  url_fields <- isolate(parseQueryString(session$clientData$url_search)) \n',
              '  gene1 <- ifelse(is.null(url_fields$gene1), {prefix}def$gene1, url_fields$gene1) \n',
              '  gene2 <- ifelse(is.null(url_fields$gene2), {prefix}def$gene2, url_fields$gene2) \n',
              '  if (!(gene1 %in% names({prefix}gene))) gene1 <- gene_lookup_table[[gene1]] \n',
@@ -742,27 +789,6 @@ wrSVmain <- function(prefix, subst = "") {
              '                       selected = {prefix}conf[is.na(fID)]$UI[1], options = list( \n',
              '                         maxOptions = length({prefix}conf[is.na(fID)]$UI) + 3, \n',
              '                         create = TRUE, persist = TRUE, render = I(optCrt))) \n',
-             '  # Rather than hard-coding the tab names from ui.R again here in server.R, \n',
-             '  # use JavaScript (through shinyjs) to determine them \n',
-             '  if (!is.null(url_fields$tab)) {{ \n',
-             '    i_tab <- as.integer(url_fields$tab) \n',
-             '    if (!is.na(i_tab)) {{ \n',
-             '      runjs(paste( \n',
-             '        "const navbar = document.getElementById(\'navbar\');", \n',
-             '        "const tabAnchors = Array.from(navbar.getElementsByTagName(\'a\'));", \n',
-             '        "const namedTabs = tabAnchors.filter((a) => a.hasAttribute(\'data-value\'));", \n',
-             '        "const tabNames = namedTabs.map((tab) => tab.getAttribute(\'data-value\'));", \n',
-             '        "Shiny.setInputValue(\'tab_names\', tabNames);" \n',
-             '      )) \n',
-             '    }} \n',
-             '  }} \n',
-             '  # The JavaScript code above is asynchronous, so select the requested tab on receiving the tab names \n',
-             '  observeEvent(input$tab_names, {{ \n',
-             '    n_tabs <- length(input$tab_names) \n',
-             '    if (i_tab < 1) i_tab <- 1 \n',
-             '    else if (i_tab > n_tabs) i_tab <- n_tabs \n',
-             '    updateNavbarPage(session, "navbar", input$tab_names[i_tab]) \n',
-             '  }}) \n',
              ' \n',
              ' \n',
              '  ### Plots for tab a1 \n',

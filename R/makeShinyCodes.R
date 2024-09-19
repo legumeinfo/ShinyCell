@@ -56,6 +56,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
         "ggrepel","hdf5r","ggdendro","gridExtra","RCurl","jsonlite")), file = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, file = fname)
     readr::write_file(wrSVfix(), append = TRUE, file = fname)
+    readr::write_file(wrSVurl(), append = TRUE, file = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, file = fname)
     readr::write_file(wrSVend(), append = TRUE, file = fname)
     
@@ -85,6 +86,7 @@ makeShinyCodes <- function(shiny.title, shiny.footnotes,
         "ggrepel","hdf5r","ggdendro","gridExtra","RCurl","jsonlite")), path = fname)
     readr::write_file(wrSVload(shiny.prefix), append = TRUE, path = fname)
     readr::write_file(wrSVfix(), append = TRUE, path = fname)
+    readr::write_file(wrSVurl(), append = TRUE, path = fname)
     readr::write_file(wrSVmain(shiny.prefix, subst), append = TRUE, path = fname)
     readr::write_file(wrSVend(), append = TRUE, path = fname)
     
