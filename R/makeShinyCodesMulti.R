@@ -72,7 +72,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
       readr::write_file(wrSVload(i), append = TRUE, file = fname)
     }
     readr::write_file(wrSVfix(), append = TRUE, file = fname)
-    readr::write_file(wrSVurl(num_datasets = length(shiny.prefix)), append = TRUE, file = fname)
+    readr::write_file(wrSVurl(), append = TRUE, file = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVmain(i, subst), append = TRUE, file = fname)
     }
@@ -114,7 +114,7 @@ makeShinyCodesMulti <- function(shiny.title, shiny.footnotes,
       readr::write_file(wrSVload(i), append = TRUE, path = fname)
     }
     readr::write_file(wrSVfix(), append = TRUE, path = fname)
-    readr::write_file(wrSVurl(num_datasets = length(shiny.prefix)), append = TRUE, path = fname)
+    readr::write_file(wrSVurl(), append = TRUE, path = fname)
     for(i in shiny.prefix){
       readr::write_file(wrSVmain(i, subst), append = TRUE, path = fname)
     }

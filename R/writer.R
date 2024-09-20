@@ -66,6 +66,18 @@ wrSVfix <- function() {
              ' \n',
              '# Read properties related to gene names \n',
              'props <- readRDS("properties.rds") \n',
+             '# Add default tab index if not specified \n',
+             'if (is.null(props$tab_index)) {{ \n',
+             '  props$tab_index = list( \n',
+             '    "cell-gene" = 1, \n',
+             '    "cell-cell" = 2, \n',
+             '    "gene-gene" = 3, \n',
+             '    "gene-coexpression" = 4, \n',
+             '    "violin-box" = 5, \n',
+             '    "proportion-numbers" = 6, \n',
+             '    "bubble-heatmap" = 7 \n',
+             '  ) \n',
+             '}} \n',
              ' \n',
              '# Create gene lookup table \n',
              'readGeneLookupTable <- function() {{ \n',
@@ -710,31 +722,24 @@ wrSVfix <- function() {
 
 #' Write code for parsing URL fields
 #'
-#' @param num_datasets number of files (datasets)
-#' TODO: automatically determine num_tabs (now hard-coded to 7)
-#'
 #' @rdname wrSVurl
 #' @export wrSVurl
 #'
-wrSVurl <- function(num_datasets = 1) {
+wrSVurl <- function() {
   glue::glue(' \n',
              '  # Extract requested dataset and tab from URL \n',
              '  url_fields <- isolate(parseQueryString(session$clientData$url_search)) \n',
-             '  if (is.null(url_fields$dataset)) {{ \n',
+             '  if (is.null(props$dataset_index) || is.null(url_fields$dataset)) {{ \n',
              '    i_dataset <- 1 \n',
              '  }} else {{ \n',
-             '    i_dataset <- as.integer(url_fields$dataset) \n',
-             '    if (is.na(i_dataset)) i_dataset <- -1 \n',
+             '    i_dataset <- props$dataset_index[[url_fields$dataset]] \n',
              '  }} \n',
              '  if (is.null(url_fields$tab)) {{ \n',
              '    i_tab <- 1 \n',
              '  }} else {{ \n',
-             '    i_tab <- as.integer(url_fields$tab) \n',
-             '    if (is.na(i_tab)) i_tab <- -1 \n',
+             '    i_tab <- props$tab_index[[url_fields$tab]] \n',
              '  }} \n',
-             '  num_tabs <- 7 \n',
-             '  good_request <- (i_dataset >= 1 && i_dataset <= {num_datasets} && i_tab >= 1 && i_tab <= num_tabs) \n',
-             '  if (good_request) {{ \n',
+             '  if (!(is.null(i_dataset) || is.null(i_tab))) {{ \n',
              '    # The tabs we are interested in have href in the form \'#tab-nnnn-t\', \n',
              '    # where nnnn is each dataset\'s unique 4-digit tabset id, and t is the tab id (i_tab), \n',
              '    runjs(paste( \n',
@@ -749,7 +754,7 @@ wrSVurl <- function(num_datasets = 1) {
              '      "document.querySelector(\'a[href=\\"\' + tabId + \'\\"]\').click();" \n',
              '    )) \n',
              '  }} else {{ \n',
-             '    alert("Invalid dataset or tab index in URL"); \n',
+             '    alert("Invalid tab or dataset tag in URL"); \n',
              '    updateQueryString("/") \n',
              '  }} \n',
              ' \n',

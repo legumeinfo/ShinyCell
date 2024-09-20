@@ -210,26 +210,53 @@ using hierarchical clustering.
 
 ![](images/quick-shiny5.png)
 
+## &#127793; LIS-specific properties
+
+As part of your build process, create an R data file called `properties.rds` in your application folder, containing a list of (optional) fields described in the next two sections. If any are not specified, `ShinyCell` uses their default settings.
+
+For an example, see the **_Medicago truncatula_ Meliloti vs. Mock Inoculated Root** generation process above. It defines `gene_prefix` and `gene_lookup_filename`, but not `tab_index` or `dataset_index`.
+
 ### &#127793; Specifying values in the URL
 
 This LIS version allows setting initial values of
 * `gene1`: gene to display in 1st gene expression view
 * `gene2`: gene to display in 2nd gene expression view
-* `tab`: index of selected tab, starting at 1
-* `dataset`: index of selected dataset (if multiple datasets exist), starting at 1
+* `tab`: tag for selected tab
+* `dataset`: tag for selected dataset (ignored unless multiple datasets exist)
 
 For example, this URL will launch the application in the **Gene coexpression** tab, with genes MtRPG and MtFE selected.<br>
-https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/?gene1=MtRPG&gene2=MtFE&tab=4
+https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/?gene1=MtRPG&gene2=MtFE&tab=gene-coexpression
+
+To configure the tab and dataset lookup, you may add the following (optional) lists to your `properties.rds`. (Make sure that they match your actual tabs and datasets!)
+
+`tab_index`: List for converting URL `tab` field to the matching tab's index. If missing, `ShinyCell` assumes that your application has the original tab structure,
+```
+tab_index = list(
+  "cell-gene" = 1,
+  "cell-cell" = 2,
+  "gene-gene" = 3,
+  "gene-coexpression" = 4,
+  "violin-box" = 5,
+  "proportion-numbers" = 6,
+  "bubble-heatmap" = 7
+)
+```
+
+`dataset_index`: List for converting URL `dataset` field to the matching dataset's index, required only when your application has multiple datasets. An example would be
+```
+dataset_index = list(
+  "nodules" = 1,
+  "root" = 2
+)
+```
 
 ### &#127793; Gene linkouts
 
-The **Gene expression** panels now display a set of linkouts for the selected gene. We obtain these from the LIS `gene_linkouts` microservice, which takes as argument the full-yuck gene name. Since the gene names in your Seurat object are generally short forms or represented by another symbol, you must tell `ShinyCell` how to convert them to full-yuck. As part of your build process, create an R data file called `properties.rds`, containing a list with the following (optional) fields:
+The **Gene expression** panels now display a set of linkouts for the selected gene. We obtain these from the LIS `gene_linkouts` microservice, which takes as argument the full-yuck gene name. Since the gene names in your Seurat object are generally short forms or represented by another symbol, you must add the following (optional) fields to your `properties.rds` to tell `ShinyCell` how to convert them to full-yuck.
 
-`gene_lookup_filename`: Name of a text file containing a lookup table of gene symbol to gene name. This file must contain two tab-separated columns; column 1 is the gene name and column 2 is the gene symbol(s). If multiple symbols point to the same gene, you may list them on the same row in column 2, separated by commas. If missing, `ShinyCell` will assume that all of your gene names really are names and not symbols, and skip the lookup.
+`gene_lookup_filename` (optional): Name of a text file containing a lookup table of gene symbol to gene name. This file must contain two tab-separated columns; column 1 is the gene name and column 2 is the gene symbol(s). If multiple symbols point to the same gene, you may list them on the same row in column 2, separated by commas. If missing, `ShinyCell` will assume that all of your gene names really are names and not symbols, and skip the lookup.
 
-`gene_prefix`: Prefix that restores the gene names to full-yuck. If missing, `ShinyCell` will assume that the gene names are already full-yuck, and skip the prefixing step.
-
-For an example, see the **_Medicago truncatula_ Meliloti vs. Mock Inoculated Root** generation process above.
+`gene_prefix` (optional): Prefix that restores the gene names to full-yuck. If missing, `ShinyCell` will assume that the gene names are already full-yuck, and skip the prefixing step.
 
 
 # Frequently Asked Questions
