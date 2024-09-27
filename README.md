@@ -158,7 +158,8 @@ or be hosted via Shiny Server. For further details, refer to
 [Instructions on how to deploy ShinyCell apps online](
 https://htmlpreview.github.io/?https://github.com/SGDDNB/ShinyCell/blob/master/docs/4cloud.html).
 
-&#127793; To generate our application [_Medicago truncatula_ Meliloti vs. Mock Inoculated Root](https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/), we use
+&#127793; R scripts for building our specific applications go in `LIS-apps`.
+For example, to generate our application [_Medicago truncatula_ Meliloti vs. Mock Inoculated Root](https://shinycell.legumeinfo.org/medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/), we use
 ``` r
 seurat_medtr <- readRDS("shinycell.rds")
 scConf_medtr <- createConfig(seurat_medtr)
@@ -169,8 +170,7 @@ props_medtr <- list(
   gene_lookup_filename = "medicago_gene_id_lookup.txt"
 )
 saveRDS(props_medtr, paste0(dir_medtr, "properties.rds"))
-makeShinyApp(seurat_medtr, scConf_medtr, gene.mapping = TRUE,
-  shiny.title = title_medtr, shiny.dir = dir_medtr)
+makeShinyApp(seurat_medtr, scConf_medtr, shiny.title = title_medtr, shiny.dir = dir_medtr)
 ```
 which puts the application files in `medtr.A17.gnm5.ann1_6.expr.Cervantes-Perez_Thibivilliers_2022/` instead of the default `shinyApp/`.
 
