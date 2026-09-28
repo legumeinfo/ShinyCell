@@ -1340,6 +1340,7 @@ wrUIsingle <- function(title, ganalytics) {
              ' \n')
 }
 
+gene_name_note <- 'p("Genes shown below are examples. Type in the dropdown menu to enter a specific gene."), \n'
 #' Write code for main block of ui.R
 #'
 #' @param prefix file prefix 
@@ -1456,7 +1457,8 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '        6, h4("Gene expression"), \n',
              '        fluidRow( \n',
              '          column( \n',
-             '            6, selectInput("{prefix}a1inp2", "Gene name:", choices=NULL) %>%  \n',
+             '            6, ', gene_name_note,
+             '            selectInput("{prefix}a1inp2", "Gene name:", choices=NULL) %>%  \n',
              '              helper(type = "inline", size = "m", fade = TRUE, \n',
              '                     title = "Gene expression to colour cells by", \n',
              '                     content = c("Select gene to colour cells by gene expression", \n',
@@ -1690,7 +1692,8 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '        6, style="border-right: 2px solid black", h4("Gene expression 1"), \n',
              '        fluidRow( \n',
              '          column( \n',
-             '            6, selectInput("{prefix}a3inp1", "Gene name:", choices=NULL) %>%  \n',
+             '            6, ', gene_name_note,
+             '            selectInput("{prefix}a3inp1", "Gene name:", choices=NULL) %>%  \n',
              '              helper(type = "inline", size = "m", fade = TRUE, \n',
              '                     title = "Gene expression to colour cells by", \n',
              '                     content = c("Select gene to colour cells by gene expression", \n',
@@ -1727,7 +1730,8 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '        6, h4("Gene expression 2"), \n',
              '        fluidRow( \n',
              '          column( \n',
-             '            6, selectInput("{prefix}a3inp2", "Gene name:", choices=NULL) %>%  \n',
+             '            6, ', gene_name_note,
+             '            selectInput("{prefix}a3inp2", "Gene name:", choices=NULL) %>%  \n',
              '              helper(type = "inline", size = "m", fade = TRUE, \n',
              '                     title = "Gene expression to colour cells by", \n',
              '                     content = c("Select gene to colour cells by gene expression", \n',
@@ -1821,6 +1825,7 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '   fluidRow( \n',
              '     column( \n',
              '       3, style="border-right: 2px solid black", h4("Gene Expression"), \n',
+             '       ', gene_name_note,
              '       selectInput("{prefix}b2inp1", "Gene 1:", choices=NULL) %>%  \n',
              '         helper(type = "inline", size = "m", fade = TRUE, \n',
              '               title = "Gene expression to colour cells by", \n',
@@ -1829,6 +1834,7 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '                                 "White-Red colour scheme which can be ", \n',
              '                                 "changed in the plot controls"))), \n',
              '       htmlOutput("{prefix}b2lnk1"), \n',
+             '       ', gene_name_note,
              '       selectInput("{prefix}b2inp2", "Gene 2:", choices=NULL) %>% \n',
              '         helper(type = "inline", size = "m", fade = TRUE, \n',
              '                title = "Gene expression to colour cells by", \n',
@@ -1891,6 +1897,7 @@ wrUImain <- function(prefix, subst = "", ptsiz = "1.25") {
              '                content = c("Select categorical cell information to group cells by",  \n',
              '                            "- Single cells are grouped by this categorical covariate",  \n',
              '                            "- Plotted as the X-axis of the violin plot / box plot")),  \n',
+             '       ', gene_name_note,
              '       selectInput("{prefix}c1inp2", "Cell Info / Gene name (Y-axis):", choices=NULL) %>%  \n',
              '         helper(type = "inline", size = "m", fade = TRUE, \n',
              '                title = "Cell Info / Gene to plot", \n',
